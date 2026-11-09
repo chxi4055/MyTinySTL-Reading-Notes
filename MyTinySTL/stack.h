@@ -55,7 +55,7 @@ public:
     :c_(c)
   {
   }
-  stack(Container&& c) noexcept(std::is_nothrow_move_constructible<Container>::value)
+  stack(Container&& c) noexcept(std::is_nothrow_move_constructible<Container>::value)//&&浅拷贝 只拷贝底层指针
     :c_(mystl::move(c)) 
   {
   }
