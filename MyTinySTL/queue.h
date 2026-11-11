@@ -34,7 +34,7 @@ private:
 public:
   // 构造、复制、移动函数
 
-  queue() = default;
+  queue() = default;// 默认构造函数 容器已经有构造函数时 系统不会再自动生成默认构造函数 需要手动声明
 
   explicit queue(size_type n) 
     :c_(n) 

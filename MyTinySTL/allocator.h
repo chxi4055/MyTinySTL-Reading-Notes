@@ -22,6 +22,8 @@ public:
   typedef const T&     const_reference;
   typedef size_t       size_type;
   typedef ptrdiff_t    difference_type;
+//typedef T value_type 外界使用 allocator<T>::value_type 来获取 T 类型 
+//模板函数内部使用 需要使用 typename allocator<T>::value_type 来获取 T 类型
 
 public:
   static T*   allocate();
@@ -40,7 +42,8 @@ public:
   static void destroy(T* ptr);
   static void destroy(T* first, T* last);
 };
-
+//static 静态变量 两个类的该静态变量共用一个内存
+//静态成员函数 静态成员函数只能访问静态成员变量 不能访问非静态成员变量
 template <class T>
 T* allocator<T>::allocate()
 {
