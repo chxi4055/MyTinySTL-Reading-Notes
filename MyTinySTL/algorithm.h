@@ -13,6 +13,6 @@ namespace mystl
 {
 
 } // namespace mystl
-
+//此处的namespace mystl没有实际作用 只是声明include的头文件属于mystl命名空间 方便用户使用
 #endif // !MYTINYSTL_ALGORITHM_H_
 

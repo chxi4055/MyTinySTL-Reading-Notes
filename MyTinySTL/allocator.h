@@ -43,7 +43,7 @@ public:
   static void destroy(T* first, T* last);
 };
 //static 静态变量 两个类的该静态变量共用一个内存
-//静态成员函数 静态成员函数只能访问静态成员变量 不能访问非静态成员变量
+//静态成员函数 静态成员函数只能访问静态成员变量 不能访问非静态成员变量（访问和接受的参数不是一回事）
 template <class T>
 T* allocator<T>::allocate()
 {

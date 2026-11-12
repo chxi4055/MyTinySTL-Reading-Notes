@@ -15,27 +15,30 @@ namespace mystl
 {
 
 // char_traits
-
-template <class CharType>
+//template 和下文的 struct连接在一起使用
+template <class CharType>//Chartype模板 后续的char_traits模板类将使用CharType作为字符类型
 struct char_traits
 {
   typedef CharType char_type;
-  
-  static size_t length(const char_type* str)
+  //静态成员函数 此处没有访问成员变量 
+  //用static函数能支持泛型编程 如果没有static 就需要实例化的类型
+  static size_t length(const char_type* str)//静态成员函数 大家length函数共用一个内存空间
   {
     size_t len = 0;
     for (; *str != char_type(0); ++str)
+    //此处char_type(0)把整数 0 转换成当前 CharType 所代表的那个具体类型，并创建一个值为 0 的临时对象
+    //值为0是指ascii码表中 0 代表的字符 也即是‘\0’ 字符串的结束符
       ++len;
     return len;
   }
 
   static int compare(const char_type* s1, const char_type* s2, size_t n)
   {
-    for (; n != 0; --n, ++s1, ++s2)
+    for (; n != 0; --n, ++s1, ++s2)//++s2相当于说s2=s2+1 也就是指向下一个字符
     {
       if (*s1 < *s2)
         return -1;
-      if (*s2 < *s1)
+      if (*s2 < *s1)//比较的是ascii码表中字符的大小
         return 1;
     }
     return 0;
@@ -49,7 +52,7 @@ struct char_traits
       *dst = *src;
     return r;
   }
-
+//move函数并不是std::move函数 只是名字相同 实际上是将src指向的内存块移动到dst指向的内存块中
   static char_type* move(char_type* dst, const char_type* src, size_t n)
   {
     char_type* r = dst;
@@ -60,12 +63,15 @@ struct char_traits
     }
     else if (src < dst)
     {
+      //如果dst和src指向的内存块有重叠部分，且dst在src之后，那么就需要从后往前复制，以避免覆盖未复制的数据。
+      //因此，先将dst和src指针移动到各自的末尾，然后从后往前进行复制。
       dst += n;
       src += n;
-      for (; n != 0; --n)
+      for (; n != 0; --n){
         *--dst = *--src;
     }
     return r;
+    //相等的时候没有影响 所以不做讨论
   }
 
   static char_type* fill(char_type* dst, char_type ch, size_t count)
@@ -76,9 +82,11 @@ struct char_traits
     return r;
   }
 };
-
+//noexcept即保证函数调用时不会抛出异常，若函数在运行时抛出异常，则会调用std::terminate()终止程序。
+//如果出现异常 ，程序会直接崩溃终止，而不会进入catch块进行异常处理。
+// noexcept函数C++11引入，可以被编译器优化，减少异常处理的开销，从而提高程序的性能。
 // Partialized. char_traits<char>
-template <> 
+template <> //和第一个template<char_type>搭配使用 这个是char类型的特化版本 运用了特定的函数库函数 专门提升char类型的效率
 struct char_traits<char>
 {
   typedef char char_type;
@@ -107,7 +115,7 @@ struct char_traits<char>
 };
 
 // Partialized. char_traits<wchar_t>
-template <>
+template <>//同上文的template<>
 struct char_traits<wchar_t>
 {
   typedef wchar_t char_type;
